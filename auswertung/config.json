@@ -1,0 +1,49 @@
+{
+  "model": "gemma-4-e4b-heretic",
+  "chunk_minutes": 10,
+  "chunk_tokens": 3000,
+  "chunk_lines_max": 140,
+  "overlap_lines": 10,
+  "stand_max_chars": 1500,
+  "temperature": 0.1,
+  "top_p": 0.9,
+  "repetition_penalty": 1.05,
+  "max_tokens": 3000,
+  "max_tokens_stand": 2500,
+  "max_tokens_final": 8000,
+  "temperature_final": 0.3,
+  "retry_on_invalid_json": 1,
+  "speaker_labels": {
+    "Discord name of the GM": "SL",
+    "Discord name of player 1": "Irmeltrud",
+    "Discord name of player 2": "Karl",
+    "Discord name of player 3": "Don"
+  },
+  "files": {
+    "namen": "namen.md",
+    "stand_start": "stand-start.md",
+    "schema": "schema.json"
+  },
+  "ergebnisse_compact_keys": [
+    "von",
+    "bis",
+    "ort",
+    "szene_neu",
+    "ereignisse",
+    "nsc",
+    "orte",
+    "gegenstaende",
+    "wuerfe",
+    "offen",
+    "zitate",
+    "meta",
+    "neue_namen"
+  ],
+  "ergebnisse_drop_for_final_if_over_tokens": {
+    "limit": 12000,
+    "drop": [
+      "zitate",
+      "orte"
+    ]
+  }
+}

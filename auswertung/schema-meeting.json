@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MeetingChunk",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["themen", "beschluesse", "vorschlaege", "aufgaben", "offene_fragen", "zahlen", "risiken", "anwesenheit", "rollen"],
+  "definitions": {
+    "t": { "type": "string", "pattern": "^[0-9]{1,3}:[0-5][0-9]$", "description": "Zeitstempel der Transkriptzeile als Beleg" },
+    "z": { "type": "string", "maxLength": 120, "description": "woertliches Zitat (3-12 Woerter) aus genau dieser Zeile" },
+    "kurz": { "type": "string", "maxLength": 200 },
+    "name": { "type": "string", "maxLength": 60 }
+  },
+  "properties": {
+    "themen": { "type": "array", "maxItems": 4, "items": { "type": "string", "maxLength": 100 } },
+    "beschluesse": { "type": "array", "maxItems": 8, "items": { "type": "object", "additionalProperties": false, "required": ["t", "was", "zustimmung", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "was": { "$ref": "#/definitions/kurz" }, "zustimmung": { "type": "array", "items": { "$ref": "#/definitions/name" } }, "zitat": { "$ref": "#/definitions/z" }, "t2": { "$ref": "#/definitions/t", "description": "Zeile der ausdruecklichen Zustimmung (zweiter Sprecher)" }, "zitat2": { "$ref": "#/definitions/z" } } } },
+    "vorschlaege": { "type": "array", "maxItems": 10, "items": { "type": "object", "additionalProperties": false, "required": ["t", "was", "von", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "was": { "$ref": "#/definitions/kurz" }, "von": { "$ref": "#/definitions/name" }, "zitat": { "$ref": "#/definitions/z" } } } },
+    "aufgaben": { "type": "array", "maxItems": 10, "items": { "type": "object", "additionalProperties": false, "required": ["t", "was", "owner", "frist", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "was": { "$ref": "#/definitions/kurz" }, "owner": { "type": ["string", "null"], "maxLength": 60 }, "frist": { "type": ["string", "null"], "maxLength": 60 }, "zitat": { "$ref": "#/definitions/z" } } } },
+    "offene_fragen": { "type": "array", "maxItems": 8, "items": { "type": "object", "additionalProperties": false, "required": ["t", "frage", "von", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "frage": { "$ref": "#/definitions/kurz" }, "von": { "$ref": "#/definitions/name" }, "zitat": { "$ref": "#/definitions/z" } } } },
+    "zahlen": { "type": "array", "maxItems": 10, "items": { "type": "object", "additionalProperties": false, "required": ["t", "was", "wert", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "was": { "$ref": "#/definitions/kurz" }, "wert": { "type": "string", "maxLength": 60 }, "zitat": { "$ref": "#/definitions/z" } } } },
+    "risiken": { "type": "array", "maxItems": 6, "items": { "type": "object", "additionalProperties": false, "required": ["t", "was", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "was": { "$ref": "#/definitions/kurz" }, "zitat": { "$ref": "#/definitions/z" } } } },
+    "anwesenheit": { "type": "array", "maxItems": 6, "items": { "type": "object", "additionalProperties": false, "required": ["t", "wer", "art", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "wer": { "$ref": "#/definitions/name" }, "art": { "enum": ["kommt", "geht"] }, "zitat": { "$ref": "#/definitions/z" } } } },
+    "rollen": { "type": "array", "maxItems": 4, "items": { "type": "object", "additionalProperties": false, "required": ["t", "wer", "rolle", "zitat"],
+      "properties": { "t": { "$ref": "#/definitions/t" }, "wer": { "$ref": "#/definitions/name" }, "rolle": { "type": "string", "maxLength": 60 }, "zitat": { "$ref": "#/definitions/z" } } } }
+  }
+}

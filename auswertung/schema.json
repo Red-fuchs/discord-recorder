@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SchicksalsschlagChunk",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["von", "bis", "ort", "szene_neu", "ereignisse", "nsc", "orte", "gegenstaende", "wuerfe", "offen", "zitate", "meta", "neue_namen"],
+  "definitions": {
+    "t": { "type": "string", "pattern": "^[0-9]{1,3}:[0-5][0-9]$", "description": "Zeitstempel der Transkriptzeile, auf die sich der Eintrag stuetzt" },
+    "kurz": { "type": "string", "maxLength": 160 },
+    "name": { "type": "string", "maxLength": 60 }
+  },
+  "properties": {
+    "von": { "$ref": "#/definitions/t" },
+    "bis": { "$ref": "#/definitions/t" },
+    "ort": { "type": ["string", "null"], "maxLength": 60, "description": "Aufenthaltsort der Gruppe am Ende des Abschnitts" },
+    "szene_neu": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["t", "titel"],
+      "properties": {
+        "t": { "$ref": "#/definitions/t" },
+        "titel": { "type": "string", "maxLength": 60 }
+      },
+      "description": "Nur wenn im Abschnitt eine neue Szene beginnt (Ortswechsel, Zeitsprung, Kampfbeginn)"
+    },
+    "ereignisse": {
+      "type": "array", "maxItems": 10,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "wer", "was"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "wer": { "type": "array", "maxItems": 4, "items": { "$ref": "#/definitions/name" } },
+          "was": { "$ref": "#/definitions/kurz" }
+        }
+      }
+    },
+    "nsc": {
+      "type": "array", "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "name", "notiz"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "name": { "$ref": "#/definitions/name" },
+          "notiz": { "type": "string", "maxLength": 120 }
+        }
+      }
+    },
+    "orte": {
+      "type": "array", "maxItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "name"],
+        "properties": { "t": { "$ref": "#/definitions/t" }, "name": { "$ref": "#/definitions/name" } }
+      }
+    },
+    "gegenstaende": {
+      "type": "array", "maxItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "name", "notiz"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "name": { "$ref": "#/definitions/name" },
+          "notiz": { "type": "string", "maxLength": 120 }
+        }
+      }
+    },
+    "wuerfe": {
+      "type": "array", "maxItems": 10,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "wer", "art", "saeule", "ergebnis", "sp", "notiz"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "wer": { "$ref": "#/definitions/name" },
+          "art": { "type": "string", "enum": ["Probe", "Initiative", "Schicksalspunkt", "Neuwurf", "Schicksalsergeben", "Fremdkraft", "Orakel"] },
+          "saeule": { "type": ["string", "null"], "enum": ["Kampf", "Sozial", "Wissen", null] },
+          "ergebnis": { "type": "string", "enum": ["Erfolg", "Misserfolg", "kritischer Erfolg", "kritischer Misserfolg", "unklar"] },
+          "sp": { "type": "integer", "minimum": 0, "maximum": 5, "description": "eingesetzte Schicksalspunkte, 0 wenn nicht genannt" },
+          "notiz": { "type": "string", "maxLength": 120 }
+        }
+      }
+    },
+    "offen": {
+      "type": "array", "maxItems": 5,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "was"],
+        "properties": { "t": { "$ref": "#/definitions/t" }, "was": { "$ref": "#/definitions/kurz" } }
+      },
+      "description": "Unerledigte Aufgaben, Versprechen, Raetsel, Drohungen"
+    },
+    "zitate": {
+      "type": "array", "maxItems": 2,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "wer", "text"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "wer": { "$ref": "#/definitions/name" },
+          "text": { "type": "string", "maxLength": 200, "description": "woertlich aus dem Transkript, nur Spielfiguren" }
+        }
+      }
+    },
+    "meta": {
+      "type": "array", "maxItems": 3,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "wer", "was"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "wer": { "type": "string", "enum": ["SL", "Irmeltrud", "Karl", "Don"] },
+          "was": { "$ref": "#/definitions/kurz" }
+        }
+      },
+      "description": "Regelkritik, Wuensche, Termine (Out-of-Character)"
+    },
+    "neue_namen": {
+      "type": "array", "maxItems": 8,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["t", "wort", "art"],
+        "properties": {
+          "t": { "$ref": "#/definitions/t" },
+          "wort": { "type": "string", "maxLength": 40, "description": "Schreibweise wie im Transkript" },
+          "art": { "type": "string", "enum": ["Person", "Ort", "Gegenstand", "Wesen", "Begriff", "unklar"] }
+        }
+      }
+    }
+  }
+}
